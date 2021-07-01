@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="grechhub.cc.ua.mainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_resLinkFragment"
+            app:destination="@id/resLinkFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_getAchievementsFragment"
+            app:destination="@id/getAchievementsFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_showAchievementsFragment"
+            app:destination="@id/showAchievementsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/resLinkFragment"
+        android:name="grechhub.cc.ua.resLinkFragment"
+        android:label="fragment_res_link"
+        tools:layout="@layout/fragment_res_link" >
+        <action
+            android:id="@+id/action_resLinkFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/getAchievementsFragment"
+        android:name="grechhub.cc.ua.getAchievementsFragment"
+        android:label="fragment_get_achievements"
+        tools:layout="@layout/fragment_get_achievements" >
+        <action
+            android:id="@+id/action_getAchievementsFragment_to_showAchievementsFragment"
+            app:destination="@id/showAchievementsFragment" />
+        <action
+            android:id="@+id/action_getAchievementsFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/showAchievementsFragment"
+        android:name="grechhub.cc.ua.showAchievementsFragment"
+        android:label="fragment_show_achievements"
+        tools:layout="@layout/fragment_show_achievements" >
+        <action
+            android:id="@+id/action_showAchievementsFragment_to_getAchievementsFragment"
+            app:destination="@id/getAchievementsFragment" />
+        <action
+            android:id="@+id/action_showAchievementsFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+</navigation>

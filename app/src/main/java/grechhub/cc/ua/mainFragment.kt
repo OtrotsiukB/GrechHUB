@@ -39,7 +39,7 @@ class mainFragment : Fragment(),rvListMain.OnItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mLayoutManager =            LinearLayoutManager(context,RecyclerView.VERTICAL,true)
+        val mLayoutManager = LinearLayoutManager(context,RecyclerView.VERTICAL,true)
         binding.rvMainCategory.layoutManager = mLayoutManager
         categorryAdapter.setData(dataCategoryMain.getCategory())
         binding.rvMainCategory.adapter=categorryAdapter

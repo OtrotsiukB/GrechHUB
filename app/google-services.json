@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "147291492593",
+    "project_id": "grechhub",
+    "storage_bucket": "grechhub.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:147291492593:android:e10a2876d82dc3ef7d9950",
+        "android_client_info": {
+          "package_name": "grechhub.cc.ua"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "147291492593-34ov7qdp7rlvfvo37ktgvaf6qpa03osf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATuvc5LGDUBALfmnJzctxfMs4a5bpNua0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "147291492593-34ov7qdp7rlvfvo37ktgvaf6qpa03osf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

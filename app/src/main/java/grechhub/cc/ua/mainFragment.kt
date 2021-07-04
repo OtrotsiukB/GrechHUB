@@ -44,7 +44,10 @@ class mainFragment : Fragment(),rvListMain.OnItemClickListener {
         categorryAdapter.setData(dataCategoryMain.getCategory())
         binding.rvMainCategory.adapter=categorryAdapter
     }
-
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
     override fun onItemClick(data: MainCategorry) {
         when(data.nameCategory){
             "Наші ресурси"      ->{ findNavController().navigate(R.id.action_mainFragment_to_resLinkFragment) }

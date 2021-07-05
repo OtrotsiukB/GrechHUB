@@ -2,6 +2,8 @@ package grechhub.cc.ua
 
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -18,11 +20,12 @@ import androidx.core.app.ActivityCompat
 import java.util.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),IWorkWithGPSandActivity {
     var tvStatusGPS:TextView?=null
     var tvEnabledGPS: TextView? = null
     var tvLocationGPS: TextView? = null
     var locationManager: LocationManager? = null
+    var interfaceFragment: IWorkWithFindAchivenment?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -32,6 +35,10 @@ class MainActivity : AppCompatActivity() {
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
        // locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, locationListener)
         Log.v("gps demo", "start")
+
+
+    }
+    override fun startGPS(){
         ActivityCompat.requestPermissions(
             this, listOf<String>(
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -40,44 +47,23 @@ class MainActivity : AppCompatActivity() {
         )
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-try {
-    locationManager!!.requestLocationUpdates(
-        LocationManager.GPS_PROVIDER, (
-                1000 * 1).toLong(), 10f, locationListener!!
-    )
-}catch (e:Exception){
-    val x= e
-    val d = x
-    Log.v("gps demo", "requestLocationUpdates")
-}
+            try {
+                locationManager!!.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER, (
+                            1000 * 1).toLong(), 10f, locationListener!!
+                )
+            }catch (e:Exception){
+                interfaceFragment?.blockAccesToGPS()
+                Log.v("gps demo", "requestLocationUpdates")
+            }
             Log.v("gps demo", "requestLocationUpdates")
             return;
-        }
-       // checkEnabled()
-       /* if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
-        }
-        locationManager!!.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER, (
-                    1000 * 1).toLong(), 10f, locationListener!!
-        )*/
-        Log.v("gps demo", "requestLocationUpdates")
-        checkEnabled()
+        }else{
 
+
+        }
+
+        checkEnabled()
     }
     override fun onResume() {
         super.onResume()
@@ -154,6 +140,8 @@ private var locationListener: LocationListener? = object : LocationListener {
         if (location.provider == LocationManager.GPS_PROVIDER) {
             formatLocation(location)?.let { Log.v("gps demo", it) }
             tvLocationGPS?.setText(formatLocation(location))
+            ////
+            interfaceFragment?.showLocationOnGPS(location)
 
         }
     }
@@ -166,17 +154,20 @@ private var locationListener: LocationListener? = object : LocationListener {
         )
     }
 
+    @SuppressLint("MissingPermission")
     private fun checkEnabled() {
         Log.v("gps demo","Enabled: " +
                                      locationManager
                                 ?.isProviderEnabled(LocationManager.GPS_PROVIDER))
-        tvEnabledGPS?.setText(
+        val text = tvEnabledGPS?.setText(
             "Enabled: "
                     + locationManager
                 ?.isProviderEnabled(LocationManager.GPS_PROVIDER)
         )
 
-       // showLocation(locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER))
+        interfaceFragment?.showEnablrGPS("GPS: "
+                + locationManager
+            ?.isProviderEnabled(LocationManager.GPS_PROVIDER))
 
 
     }
@@ -188,4 +179,10 @@ private var locationListener: LocationListener? = object : LocationListener {
             )
         )
     }
+
+    override fun setInterfaceFrafment(interfaceFragment: IWorkWithFindAchivenment) {
+        this.interfaceFragment= interfaceFragment
+    }
+
+
 }

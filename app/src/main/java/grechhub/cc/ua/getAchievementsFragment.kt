@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import grechhub.cc.ua.databinding.FragmentGetAchievementsBinding
@@ -56,6 +57,21 @@ class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
         binding.bFindAcivka.isEnabled=false
         showTitleText()
         startChengeSputnic()
+        binding.bFindAcivka.setOnClickListener {
+            if(locationtemp!=null) {
+                val achivenments = CheckAchievements.checkAchievements(locationtemp!!)
+
+                if(achivenments.size>0) {
+                    val toast =
+                        Toast.makeText(requireContext(), achivenments[0].nameAchivement, Toast.LENGTH_SHORT)
+                    toast.show()
+                }else{
+                    val toast =
+                        Toast.makeText(requireContext(), "Нових ачівок не знайдено!", Toast.LENGTH_SHORT)
+                    toast.show()
+                }
+            }
+        }
 
     }
     override fun onAttach(context: Context) {

@@ -21,20 +21,14 @@ import java.util.*
 
 
 class MainActivity : AppCompatActivity(),IWorkWithGPSandActivity {
-    var tvStatusGPS:TextView?=null
-    var tvEnabledGPS: TextView? = null
-    var tvLocationGPS: TextView? = null
+
     var locationManager: LocationManager? = null
     var interfaceFragment: IWorkWithFindAchivenment?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        tvStatusGPS=findViewById(R.id.tvStatusGPS)
-        tvEnabledGPS=findViewById(R.id.tvEnabledGPS)
-        tvLocationGPS=findViewById(R.id.tvLocationGPS)
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-       // locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, locationListener)
-        Log.v("gps demo", "start")
+
 
 
     }
@@ -54,15 +48,9 @@ class MainActivity : AppCompatActivity(),IWorkWithGPSandActivity {
                 )
             }catch (e:Exception){
                 interfaceFragment?.blockAccesToGPS()
-                Log.v("gps demo", "requestLocationUpdates")
             }
-            Log.v("gps demo", "requestLocationUpdates")
             return;
-        }else{
-
-
         }
-
         checkEnabled()
     }
     override fun onResume() {
@@ -75,20 +63,13 @@ class MainActivity : AppCompatActivity(),IWorkWithGPSandActivity {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+
             return
         }
         locationManager!!.requestLocationUpdates(
             LocationManager.GPS_PROVIDER, (
                     1000 * 10).toLong(), 10f, locationListener!!
         )
-        Log.v("gps demo", "requestLocationUpdates")
         checkEnabled()
     }
 
@@ -130,7 +111,7 @@ private var locationListener: LocationListener? = object : LocationListener {
 
     override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {
         if (provider == LocationManager.GPS_PROVIDER) {
-            tvStatusGPS?.setText("Status: $status")
+           // tvStatusGPS?.setText("Status: $status")
         }
     }
 }
@@ -138,38 +119,15 @@ private var locationListener: LocationListener? = object : LocationListener {
     private fun showLocation(location: Location?) {
         if (location == null) return
         if (location.provider == LocationManager.GPS_PROVIDER) {
-            formatLocation(location)?.let { Log.v("gps demo", it) }
-            tvLocationGPS?.setText(formatLocation(location))
-            ////
             interfaceFragment?.showLocationOnGPS(location)
-
         }
-    }
-    private fun formatLocation(location: Location?): String? {
-        return if (location == null) "" else java.lang.String.format(
-            "Coordinates: lat = %1$.4f, lon = %2$.4f, time = %3\$tF %3\$tT",
-            location.latitude, location.longitude, Date(
-                location.time
-            )
-        )
     }
 
     @SuppressLint("MissingPermission")
     private fun checkEnabled() {
-        Log.v("gps demo","Enabled: " +
-                                     locationManager
-                                ?.isProviderEnabled(LocationManager.GPS_PROVIDER))
-        val text = tvEnabledGPS?.setText(
-            "Enabled: "
-                    + locationManager
-                ?.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        )
-
         interfaceFragment?.showEnablrGPS("GPS: "
                 + locationManager
             ?.isProviderEnabled(LocationManager.GPS_PROVIDER))
-
-
     }
 
     fun onClickLocationSettings(view: View?) {

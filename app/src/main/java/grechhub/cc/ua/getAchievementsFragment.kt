@@ -17,6 +17,10 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import grechhub.cc.ua.databinding.FragmentGetAchievementsBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.lang.Thread.sleep
 import java.util.*
 
 
@@ -24,9 +28,9 @@ class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
 
     private var _binding: FragmentGetAchievementsBinding?=null
     private val binding get() = _binding!!
-
     var locationtemp: Location? = null
     var listener: IWorkWithGPSandActivity?=null
+    var statusSputnik:Int=0//0 выключен 1 настраивается красный 2 зеленый работает
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -48,9 +52,10 @@ class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
         super.onViewCreated(view, savedInstanceState)
         listener?.setInterfaceFrafment(this)
         listener?.startGPS()
-        binding.bFindAcivka.text="Зачекайте, йде пошук місця знаходження"
+        binding.bFindAcivka.text="Зачекайте, йде пошук Вашого місця знаходження"
         binding.bFindAcivka.isEnabled=false
         showTitleText()
+        startChengeSputnic()
 
     }
     override fun onAttach(context: Context) {
@@ -66,6 +71,27 @@ class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
     }
     ////////
 
+    fun startChengeSputnic(){
+        CoroutineScope(Dispatchers.IO).launch{
+            while (true) {
+                when (statusSputnik) {
+                    0 ->    {sleep(500)}
+                    1 ->    {
+                            binding.iSputnic.setImageResource(R.drawable.res_sputnic_step_red)
+                            sleep(500)
+                            binding.iSputnic.setImageResource(R.drawable.res_sputnic_step_zero)
+                            }
+                    2 ->    {
+                            binding.iSputnic.setImageResource(R.drawable.res_sputnic_step_green)
+                            sleep(500)
+                            binding.iSputnic.setImageResource(R.drawable.res_sputnic_step_zero)
+                            }
+
+                }
+                sleep(500)
+            }
+        }
+    }
 
     override fun showLocationOnGPS(location: Location?) {
         if (location == null) return
@@ -76,15 +102,18 @@ class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
             binding.bFindAcivka.text="Знайти ачівку!"
             binding.bFindAcivka.isEnabled=true
             binding.tvPlace.text="Ваше місце знаходження:"
-
+            statusSputnik=2
         }
     }
+
 
     override fun showEnablrGPS(string: String) {
         if(string=="GPS: true"){
             binding.tvGpsOnOrDown.text="GPS: Увімкнений"
+            statusSputnik=1
         }else{
             binding.tvGpsOnOrDown.text="GPS: Вимкнений. Увімкніть!"
+            statusSputnik=0
         }
 
     }

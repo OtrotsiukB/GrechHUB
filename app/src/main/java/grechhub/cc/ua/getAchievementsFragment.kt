@@ -18,9 +18,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import grechhub.cc.ua.databinding.FragmentGetAchievementsBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.lang.Thread.sleep
 import java.util.*
 
@@ -31,6 +29,7 @@ class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
     private val binding get() = _binding!!
     var locationtemp: Location? = null
     var listener: IWorkWithGPSandActivity?=null
+    var coroutineSputnic:CoroutineScope = CoroutineScope(Dispatchers.IO)
     var statusSputnik:Int=0//0 выключен 1 настраивается красный 2 зеленый работает
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,26 +79,36 @@ class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
             listener=context
         }
     }
+
+    override fun onStop() {
+        super.onStop()
+        coroutineSputnic.cancel()
+    }
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
         listener=null
+
     }
     ////////
 
     fun startChengeSputnic(){
-        CoroutineScope(Dispatchers.IO).launch{
+        coroutineSputnic.launch{
             while (true) {
                 when (statusSputnik) {
                     0 ->    {sleep(500)}
                     1 ->    {
+                            ensureActive()
                             binding.iSputnic.setImageResource(R.drawable.res_sputnic_step_red)
                             sleep(500)
+                            ensureActive()
                             binding.iSputnic.setImageResource(R.drawable.res_sputnic_step_zero)
                             }
                     2 ->    {
+                            ensureActive()
                             binding.iSputnic.setImageResource(R.drawable.res_sputnic_step_green)
                             sleep(500)
+                            ensureActive()
                             binding.iSputnic.setImageResource(R.drawable.res_sputnic_step_zero)
                             }
 

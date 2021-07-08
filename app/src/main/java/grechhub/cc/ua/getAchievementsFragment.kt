@@ -2,12 +2,14 @@ package grechhub.cc.ua
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -17,7 +19,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import grechhub.cc.ua.data.Achievement
 import grechhub.cc.ua.databinding.FragmentGetAchievementsBinding
+import grechhub.cc.ua.dbroom.DatabaseR
 import kotlinx.coroutines.*
 import java.lang.Thread.sleep
 import java.util.*
@@ -31,6 +36,7 @@ class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
     var listener: IWorkWithGPSandActivity?=null
     var coroutineSputnic:CoroutineScope = CoroutineScope(Dispatchers.IO)
     var statusSputnik:Int=0//0 выключен 1 настраивается красный 2 зеленый работает
+    var locationsDb: DatabaseR? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -47,6 +53,10 @@ class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,14 +66,55 @@ class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
         binding.bFindAcivka.isEnabled=false
         showTitleText()
         startChengeSputnic()
+
         binding.bFindAcivka.setOnClickListener {
             if(locationtemp!=null) {
                 val achivenments = CheckAchievements.checkAchievements(locationtemp!!)
 
                 if(achivenments.size>0) {
-                    val toast =
-                        Toast.makeText(requireContext(), achivenments[0].nameAchivement, Toast.LENGTH_SHORT)
-                    toast.show()
+
+                    var achivenmentsFromDB = locationsDb?.DaoInDB()?.getAllAchievements()
+
+                    var achivenmentsMutable = mutableListOf<Achievement>()
+
+                   for(n in achivenments){
+                       var newAchiv=true
+                       if (achivenmentsFromDB != null) {
+                           if (achivenmentsFromDB.size>0) {
+                               for(u in achivenmentsFromDB){
+                                  if(n.nameAchivement==u.nameAchivement){
+                                      newAchiv = false
+                                  }
+                               }
+                           }
+                       }
+                       if(newAchiv==true){
+                           achivenmentsMutable.add(n)
+                       }
+                   }
+
+                    if(achivenmentsMutable.size>0) {
+                        locationsDb?.DaoInDB()?.insertAchievements(achivenmentsMutable.toList())
+                        var newAchivenment: String = ""
+                        for (n in achivenmentsMutable) {
+                            newAchivenment += n.nameAchivement + ", "
+                        }
+                        AlertDialog.Builder(activity)
+                            .setTitle("Ачівка!")
+                            .setMessage("Вітаємо! Ви знайшли ачівки: $newAchivenment перейти до списку ачівок?")
+                            .setPositiveButton("Звичайно!") { _, _ ->
+                                findNavController().navigate(R.id.action_getAchievementsFragment_to_showAchievementsFragment)
+                            }
+                            .setNegativeButton("Ні") { _, _ ->
+                                //Toast.makeText(context, "you called cancel", Toast.LENGTH_SHORT).show()
+                            }
+                            .show()
+
+                    }else{
+                        val toast =
+                            Toast.makeText(requireContext(), "Нових ачівок не знайдено!", Toast.LENGTH_SHORT)
+                        toast.show()
+                    }
                 }else{
                     val toast =
                         Toast.makeText(requireContext(), "Нових ачівок не знайдено!", Toast.LENGTH_SHORT)
@@ -78,6 +129,8 @@ class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
         if(context is IWorkWithGPSandActivity){
             listener=context
         }
+        locationsDb = DatabaseR.create(context.applicationContext)
+
     }
 
     override fun onStop() {

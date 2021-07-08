@@ -17,6 +17,8 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import grechhub.cc.ua.data.Achievement
+import grechhub.cc.ua.dbroom.DatabaseR
 import java.util.*
 
 
@@ -24,11 +26,11 @@ class MainActivity : AppCompatActivity(),IWorkWithGPSandActivity {
 
     var locationManager: LocationManager? = null
     var interfaceFragment: IWorkWithFindAchivenment?=null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
 
 
     }

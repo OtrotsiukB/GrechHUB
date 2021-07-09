@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import grechhub.cc.ua.data.Achievement
 import grechhub.cc.ua.data.dataCategoryMain
 import grechhub.cc.ua.databinding.FragmentMainBinding
@@ -52,7 +54,8 @@ class showAchievementsFragment : Fragment(),rvAchievement.OnItemClickListener {
     }
 
     override fun onItemClick(data: Achievement) {
-
+        var bundle = bundleOf("Achievement" to data)
+        findNavController().navigate(R.id.action_showAchievementsFragment_to_achievementDetallFragment,bundle)
     }
 
     override fun onDestroy() {

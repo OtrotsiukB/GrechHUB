@@ -52,5 +52,18 @@
         <action
             android:id="@+id/action_showAchievementsFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_showAchievementsFragment_to_achievementDetallFragment"
+            app:destination="@id/achievementDetallFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/achievementDetallFragment"
+        android:name="grechhub.cc.ua.AchievementDetallFragment"
+        android:label="fragment_achievement_detall"
+        tools:layout="@layout/fragment_achievement_detall" >
+        <argument
+            android:name="Achievement"
+            app:argType="grechhub.cc.ua.data.Achievement"
+            app:nullable="true" />
     </fragment>
 </navigation>

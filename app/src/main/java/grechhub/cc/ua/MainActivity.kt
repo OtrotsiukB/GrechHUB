@@ -3,7 +3,6 @@ package grechhub.cc.ua
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,14 +11,9 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import grechhub.cc.ua.data.Achievement
-import grechhub.cc.ua.dbroom.DatabaseR
-import java.util.*
 
 
 class MainActivity : AppCompatActivity(),IWorkWithGPSandActivity {
@@ -36,7 +30,7 @@ class MainActivity : AppCompatActivity(),IWorkWithGPSandActivity {
     }
     override fun startGPS(){
         ActivityCompat.requestPermissions(
-            this, listOf<String>(
+            this, listOf(
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ).toTypedArray(),0
@@ -51,7 +45,7 @@ class MainActivity : AppCompatActivity(),IWorkWithGPSandActivity {
             }catch (e:Exception){
                 interfaceFragment?.blockAccesToGPS()
             }
-            return;
+            return
         }
         checkEnabled()
     }

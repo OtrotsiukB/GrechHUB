@@ -2,13 +2,13 @@ package grechhub.cc.ua
 
 import android.location.Location
 import grechhub.cc.ua.data.Achievement
-import grechhub.cc.ua.data.ResLink
+
 
 object AchivementInVilege {
 
     fun checkAchievements(locationtemp: Location):List<Achievement>
     {
-        var listAchievement: MutableList<Achievement> = mutableListOf()
+        val listAchievement: MutableList<Achievement> = mutableListOf()
 
         listAchievement.addAll(checkGrechPody(locationtemp))
         return listAchievement.toList()
@@ -16,7 +16,7 @@ object AchivementInVilege {
 
     fun checkGrechPody(locationtemp: Location):List<Achievement>
     {
-        val info:Achievement=Achievement(
+        val info =Achievement(
             null,
             "Гречані Поди",
             R.drawable.achivement_villege,
@@ -25,14 +25,14 @@ object AchivementInVilege {
 
         )
 
-        var listAchievement: MutableList<Achievement> = mutableListOf()
-        val latitudeUpLeft:Double=47.792067;    val longlatitudeUpLeft:Double=33.454806;
-        val latitudeDownLeft:Double=47.779345;  val longlatitudeDownLeft:Double=33.471086;
+        val listAchievement: MutableList<Achievement> = mutableListOf()
+        val latitudeUpLeft =47.792067;    val longlatitudeUpLeft =33.454806
+        val latitudeDownLeft =47.779345;  val longlatitudeDownLeft =33.471086
         if (locationtemp.latitude<latitudeUpLeft/*верхний левый*/){
             if (locationtemp.latitude>latitudeDownLeft/*нижний правый*/){
                 if (locationtemp.longitude>longlatitudeUpLeft/*верхний левый*/){
                     if (locationtemp.longitude<longlatitudeDownLeft/*нижний левый*/){
-                        return listOf<Achievement>(info)
+                        return listOf(info)
                     }
                 }
             }

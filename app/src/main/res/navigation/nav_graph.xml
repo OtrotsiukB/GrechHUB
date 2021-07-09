@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="grechhub.cc.ua.mainFragment"
+        android:name="grechhub.cc.ua.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" >
         <action
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/resLinkFragment"
-        android:name="grechhub.cc.ua.resLinkFragment"
+        android:name="grechhub.cc.ua.ResLinkFragment"
         android:label="fragment_res_link"
         tools:layout="@layout/fragment_res_link" >
         <action
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/getAchievementsFragment"
-        android:name="grechhub.cc.ua.getAchievementsFragment"
+        android:name="grechhub.cc.ua.GetAchievementsFragment"
         android:label="fragment_get_achievements"
         tools:layout="@layout/fragment_get_achievements" >
         <action
@@ -43,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/showAchievementsFragment"
-        android:name="grechhub.cc.ua.showAchievementsFragment"
+        android:name="grechhub.cc.ua.ShowAchievementsFragment"
         android:label="fragment_show_achievements"
         tools:layout="@layout/fragment_show_achievements" >
         <action

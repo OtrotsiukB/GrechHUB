@@ -1,6 +1,6 @@
 package grechhub.cc.ua
 
-import android.content.Context
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +15,7 @@ import grechhub.cc.ua.databinding.FragmentMainBinding
 import grechhub.cc.ua.rv.rvListMain
 
 
-class mainFragment : Fragment(),rvListMain.OnItemClickListener {
+class MainFragment : Fragment(),rvListMain.OnItemClickListener {
     private var _binding:FragmentMainBinding?=null
     private val binding get() = _binding!!
     private val categorryAdapter: rvListMain = rvListMain(this)

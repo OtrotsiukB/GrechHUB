@@ -1,23 +1,15 @@
 package grechhub.cc.ua
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationListener
 import android.location.LocationManager
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import grechhub.cc.ua.data.Achievement
@@ -25,16 +17,15 @@ import grechhub.cc.ua.databinding.FragmentGetAchievementsBinding
 import grechhub.cc.ua.dbroom.DatabaseR
 import kotlinx.coroutines.*
 import java.lang.Thread.sleep
-import java.util.*
 
 
-class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
+class GetAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
 
     private var _binding: FragmentGetAchievementsBinding?=null
     private val binding get() = _binding!!
     var locationtemp: Location? = null
     var listener: IWorkWithGPSandActivity?=null
-    var coroutineSputnic:CoroutineScope = CoroutineScope(Dispatchers.IO)
+    var coroutineSputnic:CoroutineScope? = null
     var statusSputnik:Int=0//0 выключен 1 настраивается красный 2 зеленый работает
     var locationsDb: DatabaseR? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,10 +44,7 @@ class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
         return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
 
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,22 +53,23 @@ class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
         binding.bFindAcivka.text="Зачекайте, йде пошук Вашого місця знаходження"
         binding.bFindAcivka.isEnabled=false
         showTitleText()
+        coroutineSputnic=CoroutineScope(Dispatchers.IO)
         startChengeSputnic()
 
         binding.bFindAcivka.setOnClickListener {
             if(locationtemp!=null) {
                 val achivenments = CheckAchievements.checkAchievements(locationtemp!!)
 
-                if(achivenments.size>0) {
+                if(achivenments.isNotEmpty()) {
 
-                    var achivenmentsFromDB = locationsDb?.DaoInDB()?.getAllAchievements()
+                    val achivenmentsFromDB = locationsDb?.DaoInDB()?.getAllAchievements()
 
-                    var achivenmentsMutable = mutableListOf<Achievement>()
+                    val achivenmentsMutable = mutableListOf<Achievement>()
 
                    for(n in achivenments){
                        var newAchiv=true
                        if (achivenmentsFromDB != null) {
-                           if (achivenmentsFromDB.size>0) {
+                           if (achivenmentsFromDB.isNotEmpty()) {
                                for(u in achivenmentsFromDB){
                                   if(n.nameAchivement==u.nameAchivement){
                                       newAchiv = false
@@ -88,14 +77,14 @@ class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
                                }
                            }
                        }
-                       if(newAchiv==true){
+                       if(newAchiv){
                            achivenmentsMutable.add(n)
                        }
                    }
 
                     if(achivenmentsMutable.size>0) {
                         locationsDb?.DaoInDB()?.insertAchievements(achivenmentsMutable.toList())
-                        var newAchivenment: String = ""
+                        var newAchivenment = ""
                         for (n in achivenmentsMutable) {
                             newAchivenment += n.nameAchivement + ", "
                         }
@@ -124,6 +113,7 @@ class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
         }
 
     }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if(context is IWorkWithGPSandActivity){
@@ -135,7 +125,7 @@ class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
 
     override fun onStop() {
         super.onStop()
-        coroutineSputnic.cancel()
+        coroutineSputnic?.cancel()
     }
     override fun onDestroy() {
         super.onDestroy()
@@ -146,7 +136,7 @@ class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
     ////////
 
     fun startChengeSputnic(){
-        coroutineSputnic.launch{
+        coroutineSputnic?.launch{
             while (true) {
                 when (statusSputnik) {
                     0 ->    {sleep(500)}
@@ -171,12 +161,13 @@ class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun showLocationOnGPS(location: Location?) {
         if (location == null) return
         if (location.provider == LocationManager.GPS_PROVIDER) {
             locationtemp=location
            // binding.tvLocationShow.text=location?.latitude.toString()+"/"+location.longitude.toString()
-            binding.tvLocationShow.text=String.format("%.6f", location?.latitude)+"/"+String.format("%.6f", location.longitude)
+            binding.tvLocationShow.text=String.format("%.6f", location.latitude)+"/"+String.format("%.6f", location.longitude)
             binding.bFindAcivka.text="Знайти ачівку!"
             binding.bFindAcivka.isEnabled=true
             binding.tvPlace.text="Ваше місце знаходження:"
@@ -185,6 +176,7 @@ class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
     }
 
 
+    @SuppressLint("SetTextI18n")
     override fun showEnablrGPS(string: String) {
         if(string=="GPS: true"){
             binding.tvGpsOnOrDown.text="GPS: Увімкнений"
@@ -196,10 +188,12 @@ class getAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
 
     }
 
+    @SuppressLint("SetTextI18n")
     override fun blockAccesToGPS() {
         binding.tvPlace.text="Заблоковано! Зайдіть в Параметри телефону та надайте доступ до GPS цьому додатку"
     }
 
+    @SuppressLint("SetTextI18n")
     fun showTitleText(){
         binding.tvGpstitle.text="Ачівки можут залежити від Вашого місця знаходження, від часу, також можуть залежити одночасно від декількох параметрів.\nНе забувайте увімкнути GPS на Вашому мобільному пристої!\n\nУспіхів у пошуках!"
     }

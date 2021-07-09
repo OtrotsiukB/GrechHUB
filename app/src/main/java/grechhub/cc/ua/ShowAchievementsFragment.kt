@@ -16,7 +16,7 @@ import grechhub.cc.ua.rv.rvAchievement
 import grechhub.cc.ua.rv.rvListMain
 
 
-class showAchievementsFragment : Fragment(),rvAchievement.OnItemClickListener {
+class ShowAchievementsFragment : Fragment(),rvAchievement.OnItemClickListener {
     private var _binding: FragmentShowAchievementsBinding?=null
     private val binding get() = _binding!!
     private val categorryAdapter: rvAchievement = rvAchievement(this)

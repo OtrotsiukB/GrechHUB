@@ -7,7 +7,7 @@ object CheckAchievements {
 
     fun checkAchievements(locationtemp: Location):List<Achievement>
     {
-        var listAchievement: MutableList<Achievement> = mutableListOf()
+        val listAchievement: MutableList<Achievement> = mutableListOf()
         //проверяем ачивки в список по селам
         listAchievement.addAll(AchivementInVilege.checkAchievements(locationtemp))
 

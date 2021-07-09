@@ -16,7 +16,7 @@ import grechhub.cc.ua.databinding.FragmentResLinkBinding
 import grechhub.cc.ua.rv.rvResLink
 
 class
-resLinkFragment : Fragment(),rvResLink.OnItemClickListener {
+ResLinkFragment : Fragment(),rvResLink.OnItemClickListener {
     private var _binding: FragmentResLinkBinding?=null
     private val binding get() = _binding!!
     private val categorryAdapter: rvResLink = rvResLink(this)

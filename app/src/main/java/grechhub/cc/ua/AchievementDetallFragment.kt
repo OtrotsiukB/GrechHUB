@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import grechhub.cc.ua.data.Achievement
 import grechhub.cc.ua.databinding.FragmentAchievementDetallBinding
-import grechhub.cc.ua.databinding.FragmentShowAchievementsBinding
+
 
 
 class AchievementDetallFragment : Fragment() {

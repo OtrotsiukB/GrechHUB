@@ -14,18 +14,27 @@ import android.provider.Settings
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 
 
 class MainActivity : AppCompatActivity(),IWorkWithGPSandActivity {
 
     var locationManager: LocationManager? = null
     var interfaceFragment: IWorkWithFindAchivenment?=null
+    lateinit var mAdView : AdView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
+        //реклама
+        MobileAds.initialize(this) {}
+        mAdView = findViewById(R.id.adView)
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
+        //конец рекламного кода
 
     }
     override fun startGPS(){

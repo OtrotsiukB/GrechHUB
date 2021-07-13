@@ -164,7 +164,7 @@ class GetAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
     @SuppressLint("SetTextI18n")
     override fun showLocationOnGPS(location: Location?) {
         if (location == null) return
-        if (location.provider == LocationManager.GPS_PROVIDER) {
+        if (location.provider == LocationManager.GPS_PROVIDER&&_binding!=null) {
             locationtemp=location
            // binding.tvLocationShow.text=location?.latitude.toString()+"/"+location.longitude.toString()
             binding.tvLocationShow.text=String.format("%.6f", location.latitude)+"/"+String.format("%.6f", location.longitude)
@@ -178,14 +178,15 @@ class GetAchievementsFragment : Fragment(),IWorkWithFindAchivenment {
 
     @SuppressLint("SetTextI18n")
     override fun showEnablrGPS(string: String) {
-        if(string=="GPS: true"){
-            binding.tvGpsOnOrDown.text="GPS: Увімкнений"
-            statusSputnik=1
-        }else{
-            binding.tvGpsOnOrDown.text="GPS: Вимкнений. Увімкніть!"
-            statusSputnik=0
+        if(_binding!=null) {
+            if (string == "GPS: true") {
+                binding.tvGpsOnOrDown.text = "GPS: Увімкнений"
+                statusSputnik = 1
+            } else {
+                binding.tvGpsOnOrDown.text = "GPS: Вимкнений. Увімкніть!"
+                statusSputnik = 0
+            }
         }
-
     }
 
     @SuppressLint("SetTextI18n")
